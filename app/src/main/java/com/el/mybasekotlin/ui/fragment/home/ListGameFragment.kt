@@ -21,7 +21,7 @@ class ListGameFragment : BaseFragment<AFragmentBinding>(AFragmentBinding::inflat
         // Khởi tạo dataGame với các giá trị mặc định như đã khai báo trong class
         val gameData: GameData = GameData(
             id = 0,
-            gameType = GameType.MATH_RUN_GAME.value,
+            gameType = GameType.RANKING_FILTER_GAME.value,
             detailsType = GameDetailsContentType.FRAGMENT.value,
             name = "Game Test 1",
             image = "",

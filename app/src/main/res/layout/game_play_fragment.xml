@@ -12,6 +12,8 @@
         android:keepScreenOn="false"
         app:cameraAudio="on"
         app:cameraAutoFocusMarker="@string/cameraview_default_autofocus_marker"
+        app:cameraDrawHardwareOverlays="true"
+        app:cameraVideoCodec="h264"
         app:cameraEngine="camera2"
         app:cameraExperimental="true"
         app:cameraFacing="front"
@@ -31,15 +33,28 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <!--    Content game-->
-        <FrameLayout
-            android:id="@+id/contentContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <FrameLayout
+                android:id="@+id/contentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_drawOnPreview="true"
+                app:layout_drawOnVideoSnapshot="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Devmoaskdjaskjdas"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="@dimen/dp_32"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
+
+
     </com.otaliastudios.cameraview.CameraView>
 
     <!--Controller-->

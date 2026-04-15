@@ -1,19 +1,28 @@
 package com.el.mybasekotlin.ui.fragment.game
 
 import android.app.Application
+import android.content.Context
+import androidx.activity.result.launch
+import androidx.lifecycle.viewModelScope
 import com.el.mybasekotlin.base.BaseViewModel
 import com.el.mybasekotlin.data.model.game.GameData
 import com.el.mybasekotlin.data.network.api.ApiHelper
 import com.el.mybasekotlin.data.state.DataState
+import com.el.mybasekotlin.helpers.FileHelper.createTempFileWithExtension
 import com.el.mybasekotlin.ui.fragment.camera.CameraConfig
 import com.el.mybasekotlin.ui.fragment.camera.DetectionMode
 import com.el.mybasekotlin.ui.fragment.camera.FaceStateResult
 import com.otaliastudios.cameraview.frame.Frame
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -67,6 +76,7 @@ class GamePlayViewModel @Inject constructor(
         Timber.d("GamePlayViewModel: updateFaceData ${data.face?.headEulerAngleX}")
         _faceData.value = data
     }
+
     /**
      * Controller record
      */
@@ -84,11 +94,24 @@ class GamePlayViewModel @Inject constructor(
      * Game state
      */
 
-    private val _gameState  = MutableStateFlow<GameState?>(null)
+    private val _gameState = MutableStateFlow<GameState?>(null)
     val gameState: StateFlow<GameState?> = _gameState.asStateFlow()
-    fun updateGameState(gameState: GameState){
+    fun updateGameState(gameState: GameState) {
         _gameState.value = gameState
     }
+
+//    /**
+//     * File
+//     */
+//    private val _videoFileReady = MutableSharedFlow<File>()
+//    val videoFileReady = _videoFileReady.asSharedFlow()
+//
+//    fun prepareFile(context: Context) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            val file = context.createTempFileWithExtension("TEMP_FOLDER", "mp4")
+//            file?.let { _videoFileReady.emit(it) }
+//        }
+//    }
 }
 
 

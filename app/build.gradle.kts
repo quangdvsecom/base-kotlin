@@ -202,6 +202,6 @@ dependencies {
     /**
      * Camera view
      */
-    implementation("com.otaliastudios:cameraview:2.7.2")
-
+//    implementation("com.otaliastudios:cameraview:2.7.2")
+    implementation(project(":cameraview"))
 }

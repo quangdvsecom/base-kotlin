@@ -3,27 +3,39 @@ package com.el.mybasekotlin.ui.fragment.game
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.activity.result.launch
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.el.mybasekotlin.R
 import com.el.mybasekotlin.base.BaseFragment
 import com.el.mybasekotlin.data.model.game.GameData
 import com.el.mybasekotlin.databinding.GamePlayFragmentBinding
+import com.el.mybasekotlin.helpers.FileHelper
+import com.el.mybasekotlin.helpers.FileHelper.createTempFileWithExtension
 import com.el.mybasekotlin.ui.fragment.camera.CameraConfig
 import com.el.mybasekotlin.ui.fragment.camera.DetectType
 import com.el.mybasekotlin.ui.fragment.camera.FaceAnalyzerCameraView
 import com.el.mybasekotlin.utils.extension.collectIn
 import com.el.mybasekotlin.utils.extension.getScreenSize
 import com.el.mybasekotlin.utils.extension.parcelable
+import com.otaliastudios.cameraview.CameraListener
+import com.otaliastudios.cameraview.VideoResult
 import com.otaliastudios.cameraview.controls.AudioCodec
+import com.otaliastudios.cameraview.controls.Preview
+import com.otaliastudios.cameraview.controls.VideoCodec
 import com.otaliastudios.cameraview.size.AspectRatio
 import com.otaliastudios.cameraview.size.SizeSelectors
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 
 @AndroidEntryPoint
-class GamePlayScreenFragment : BaseFragment<GamePlayFragmentBinding>(GamePlayFragmentBinding::inflate) {
+class GamePlayScreenFragment :
+    BaseFragment<GamePlayFragmentBinding>(GamePlayFragmentBinding::inflate) {
     private val gamePlayViewModel: GamePlayViewModel by viewModels()
     private var currentCustomView: View? = null
     private var gameController: GameController? = null
@@ -86,6 +98,7 @@ class GamePlayScreenFragment : BaseFragment<GamePlayFragmentBinding>(GamePlayFra
             }
         }
         handleControllerRecord()
+//        handleStartRecordAndStartGame()
     }
 
     /**
@@ -98,13 +111,70 @@ class GamePlayScreenFragment : BaseFragment<GamePlayFragmentBinding>(GamePlayFra
 
     }
 
+    /**
+     * Camera listener
+     */
+    private val cameraListener = object : CameraListener() {
+        override fun onVideoTaken(result: VideoResult) {
+            val file = result.file
+
+            Timber.tag("QuangDV-check ").d("onVideoTaken")
+            Timber.tag("CameraTest QuangDV-check")
+                .d("Video saved: ${file.absolutePath}, size=${file.length()}")
+//            mainViewModel.setVideoString(file.absolutePath) // tạo thêm MainViewModel để share giữa các màn hình, lưu path video , dùng ở màn kết quả
+//            Ở đây cập nhật thêm vào list danh sách video đã record vào profile, myfolder để khi quay lại không cần  lấy danh sách video
+
+       //Test , move file to public :
+         FileHelper.moveVideoToPublic(requireContext(), file)
+
+        }
+
+        override fun onVideoRecordingEnd() {
+            Timber.tag("QuangDV-check ").d("onVideoRecordingEnd")
+            // show loading, đợi có link video thì next screen
+        }
+
+        override fun onVideoRecordingStart() {
+            Timber.tag("QuangDV-check ").d("onVideoRecordingStart")
+            //TODO start game khi thực sự record đã start
+            gameController?.start()
+        }
+
+    }
+
     fun initControllerRecord() {
         binding.apply {
             btnStart.setOnClickListener {
                 gamePlayViewModel.toggleRecording()
+                if (gamePlayViewModel.isRecording.value) {
+                    startRecordAndStartGame()
+
+                } else {
+                    stopRecordAndStopGame()
+                }
             }
 
         }
+    }
+
+    fun startRecordAndStartGame() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val file = withContext(Dispatchers.IO) {
+                context?.createTempFileWithExtension(
+                    "TEMP_FOLDER",
+                    "mp4"
+                )
+            }
+            file?.let { binding.cameraView.takeVideoSnapshot(it) }
+        }
+        //TODO ẩn UI không cần thiết
+    }
+
+
+    fun stopRecordAndStopGame() {
+        gameController?.stop()
+        binding.cameraView.stopVideo()
+        //TODO stop record, show loading =>> waiting the file record done
     }
 
     /**
@@ -112,12 +182,13 @@ class GamePlayScreenFragment : BaseFragment<GamePlayFragmentBinding>(GamePlayFra
      */
     private fun handleControllerRecord() {
         gamePlayViewModel.apply {
-            isRecording.collectIn(this@GamePlayScreenFragment) {recording->
+            isRecording.collectIn(this@GamePlayScreenFragment) { recording ->
                 Timber.d("QuangDVGamePlay $recording")
                 binding.btnStart.setImageResource(
                     if (recording) R.drawable.ic_stop_record
                     else R.drawable.ic_video_record
                 )
+                binding.topBar.visibility = if (recording) View.GONE else View.VISIBLE
             }
         }
 
@@ -173,6 +244,12 @@ class GamePlayScreenFragment : BaseFragment<GamePlayFragmentBinding>(GamePlayFra
             videoBitRate = 5000000
             snapshotMaxHeight = 1080
             snapshotMaxWidth = 720
+            addCameraListener(cameraListener)
+
+            // Đảm bảo Hardware Overlay được bật trong code
+            setPreview(Preview.GL_SURFACE)
+
+
             post { open() }
         }
     }

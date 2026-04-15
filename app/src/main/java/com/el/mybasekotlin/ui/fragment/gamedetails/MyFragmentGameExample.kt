@@ -39,9 +39,11 @@ class MyFragmentGameExample() :
     }
 
     override fun onStartGame() {
+        binding.tvStatus.text = "Game is start......"
     }
 
     override fun onStopGame() {
+        binding.tvStatus.text = "Game is stoped"
     }
 
     override fun onPauseGame() {
@@ -60,8 +62,8 @@ class MyFragmentGameExample() :
     override fun initObserver() {
 
         gameViewModel.apply {
-            faceData.collectIn(this@MyFragmentGameExample){
-                binding.tvContent.text="Content game by fragment ${it?.angleX}"
+            faceData.collectIn(this@MyFragmentGameExample) {
+                binding.tvContent.text = "Content game by fragment ${it?.angleX}"
             }
         }
 

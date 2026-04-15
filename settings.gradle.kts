@@ -20,5 +20,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Base Kotlin"
+include(":cameraview")
 include(":app")
- 
