@@ -12,6 +12,7 @@ import com.el.mybasekotlin.data.network.api.OtherApiService
 import com.el.mybasekotlin.data.network.api.RefreshTokenInterceptor
 import com.el.mybasekotlin.data.network.api.RefreshTokenService
 import com.el.mybasekotlin.data.network.api.RetrofitClient
+import com.el.mybasekotlin.helpers.JsonAssetController
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.Strictness
@@ -81,7 +82,11 @@ class AppModule {
     fun provideApiRefreshToken(@ApplicationContext app: Context): RefreshTokenService
             = RetrofitClient.createRetrofitInstance(app, RetrofitClient.TYPE_DOMAIN_API_DEFAULT,null).create(
         RefreshTokenService::class.java)
-
+    @Singleton
+    @Provides
+    fun provideJsonAssetController(@ApplicationContext app: Context): JsonAssetController {
+        return JsonAssetController(app)
+    }
 
 //    @Provides
 //    @Singleton

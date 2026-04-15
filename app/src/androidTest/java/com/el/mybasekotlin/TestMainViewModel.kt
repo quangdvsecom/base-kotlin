@@ -1,9 +1,6 @@
 package com.el.mybasekotlin
 
-import com.el.mybasekotlin.ui.fragment.MainScreenViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Before
-import org.junit.Rule
 
 /**
  * Created by ElChuanmen on 2/18/2025.

@@ -1,42 +1,25 @@
 package com.el.mybasekotlin.ui.fragment
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Bundle
 import android.widget.Toast
-import androidx.compose.runtime.collectAsState
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.el.mybasekotlin.R
 import com.el.mybasekotlin.base.BaseFragment
-import com.el.mybasekotlin.data.model.Setting
 import com.el.mybasekotlin.data.state.DataState
 import com.el.mybasekotlin.data.state.getSuccessDataOrNull
 import com.el.mybasekotlin.databinding.MainFragmentBinding
-import com.el.mybasekotlin.helpers.flowbus.launchWhenStateAtLeast
 import com.el.mybasekotlin.utils.extension.collectIn
-import com.el.mybasekotlin.utils.extension.collectInOwner
 import com.el.mybasekotlin.utils.extension.launchAndCollectIn
-import com.el.mybasekotlin.utils.extension.putExtrasBundle
-import com.el.mybasekotlin.utils.extension.requestPermission
-import com.el.mybasekotlin.utils.extension.requestPermissionsList
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 /**
@@ -51,7 +34,7 @@ class MainFragment : BaseFragment<MainFragmentBinding>(MainFragmentBinding::infl
     companion object {
         private const val STORAGE_PERMISSION_CODE = 101
     }
-    public val mainViewModel: MainScreenViewModel by viewModels()
+    public val mainViewModel: MainViewModel by viewModels()
     override fun initDataBeforeCreateView() {
     }
 

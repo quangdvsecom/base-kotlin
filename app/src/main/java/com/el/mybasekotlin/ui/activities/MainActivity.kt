@@ -8,28 +8,22 @@ import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.el.mybasekotlin.R
 import com.el.mybasekotlin.base.network.NetworkStatusProvider
 import com.el.mybasekotlin.data.local.AppPreferences
-import com.el.mybasekotlin.data.network.download.DownloadWorker
 import com.el.mybasekotlin.data.state.ErrorAction
 import com.el.mybasekotlin.helpers.TestMessage
 import com.el.mybasekotlin.helpers.flowbus.collectFlowBus
+import com.el.mybasekotlin.ui.fragment.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -42,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var broadcastErrorReceiver: BroadcastReceiver
     private lateinit var broadcastReceiver: BroadcastReceiver
     private lateinit var broadcastNewNotice: BroadcastReceiver
+    private val mainViewModel : MainViewModel by viewModels()
     private val networkStatusProvider by lazy {
         NetworkStatusProvider(getSystemService(ConnectivityManager::class.java))
     }
@@ -74,6 +69,7 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp()
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(broadcastErrorReceiver)
@@ -81,6 +77,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
+        mainViewModel.getAllDataGame()
         super.onStart()
 //        LocalBroadcastManager.getInstance(this)
 //            .registerReceiver(broadcastReceiver, IntentFilter(FIREBASE_NEW_TOKEN))
@@ -153,108 +150,6 @@ class MainActivity : AppCompatActivity() {
 //        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastNewNotice)
     }
 
-    /**
-     * Notice
-     */
-//    private fun listenerFCMChange() {
-//        Timber.d("$TAG initFCMToken ")
-//        broadcastReceiver = object : BroadcastReceiver() {
-//            override fun onReceive(context: Context?, intent: Intent?) {
-//                //TODO if is new token then call api register new token from sharePreference
-//                Timber.d("$TAG is new token")
-//                val token = AppPreferences.fcmToken
-//                if (token.isNotEmpty()) {
-//                    registerToken(AppPreferences.fcmToken)
-//                }
-//            }
-//        }
-//    }
-//
-//    //get token from firebase
-//    private fun checkFCMToken() {
-//        Timber.d("$TAG checkFCMToken ")
-//        FirebaseMessaging.getInstance().token
-//            .addOnCompleteListener { task ->
-//                if (!task.isSuccessful) {
-//                    Timber.tag(TAG).w(task.exception, "Fetching FCM registration token failed")
-//                    return@addOnCompleteListener
-//                }
-//                // Get new FCM registration token
-//                val token = task.result
-//                val lastFcmToken = AppPreferences.fcmToken
-//                Timber.d("$TAG checkFCMToken token =>> $token")
-//                Timber.d("$TAG checkFCMToken lastFcmToken =>> $lastFcmToken")
-//                if (token.isNotEmpty() && token != lastFcmToken
-//                ) {
-//                    Timber.d("$TAG checkFCMToken  =>> call api register token")
-//                    AppPreferences.fcmToken = token
-//                    //TODO call api register new token
-//                    registerToken(token)
-//                } else {
-//                    Timber.d("$TAG checkFCMToken  =>> don't call api register token ")
-//                }
-//            }
-//    }
-//
-//    private fun registerToken(fcmToken: String) {
-//        noticeViewModel.registerFCM(
-//            BodyNoticeParam(
-//                deviceID = getAndroidId(this),
-//                deviceToken = fcmToken,
-//                sessionID = getAndroidId(this),
-////                appVersion = BuildConfig.VERSION_NAME
-//            )
-//        )
-//    }
 
-    /*
-     * Download test
-     */
-//    private var workInfoLiveData: LiveData<WorkInfo?> ?= null
 
-//    private val mutableWorkInfoLiveData = MutableLiveData<WorkInfo?>()
-    private var workInfoLiveData: LiveData<WorkInfo?>? = null
-    private fun startDownload() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED) // Yêu cầu kết nối mạng
-            .build()
-
-        val inputData = workDataOf(
-            DownloadWorker.KEY_FILE_URL to "https://example.com/file.zip",
-            DownloadWorker.KEY_FILE_NAME to "file.zip"
-        )
-
-        val workRequest = OneTimeWorkRequestBuilder<DownloadWorker>()
-            .setConstraints(constraints)
-            .setInputData(inputData)
-            .build()
-//        workInfoLiveData=mutableWorkInfoLiveData
-        WorkManager.getInstance(this).enqueue(workRequest)
-        workInfoLiveData = WorkManager.getInstance(this).getWorkInfoByIdLiveData(workRequest.id)
-        workInfoLiveData!!.observe(this) { workInfo ->
-            when (workInfo?.state) {
-                WorkInfo.State.ENQUEUED -> {
-                    // Worker đã được lên lịch
-                }
-                WorkInfo.State.RUNNING -> {
-                    // Worker đang chạy
-                }
-                WorkInfo.State.SUCCEEDED -> {
-                    // Worker đã hoàn thành thành công
-                    val result = workInfo?.outputData?.getString("result_key")
-                    // Xử lý kết quả
-//                    mutableWorkInfoLiveData.postValue(workInfo)
-                }
-                WorkInfo.State.FAILED -> {
-                    // Worker đã thất bại
-                }
-                WorkInfo.State.CANCELLED -> {
-                    // Worker đã bị hủy
-                }
-                else -> {
-                    // Các trạng thái khác
-                }
-            }
-        }
-    }
 }

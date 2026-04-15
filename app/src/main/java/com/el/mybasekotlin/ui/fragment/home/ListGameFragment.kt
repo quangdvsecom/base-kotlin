@@ -1,6 +1,8 @@
 package com.el.mybasekotlin.ui.fragment.home
 
 import android.os.Bundle
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.el.mybasekotlin.R
 import com.el.mybasekotlin.base.BaseFragment
 import com.el.mybasekotlin.data.model.game.GameData
@@ -9,19 +11,24 @@ import com.el.mybasekotlin.data.model.game.GameType
 import com.el.mybasekotlin.databinding.AFragmentBinding
 import com.el.mybasekotlin.helpers.TestMessage
 import com.el.mybasekotlin.helpers.flowbus.busEvent
+import com.el.mybasekotlin.ui.fragment.MainViewModel
+import com.el.mybasekotlin.ui.fragment.game.GamePlayViewModel
+import com.el.mybasekotlin.utils.extension.collectIn
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import kotlin.getValue
 
 @AndroidEntryPoint
 class ListGameFragment : BaseFragment<AFragmentBinding>(AFragmentBinding::inflate) {
-    
+
+    private val mainViewModel: MainViewModel by activityViewModels()
     override fun initDataBeforeCreateView() {}
 
     override fun init() {
         // Khởi tạo dataGame với các giá trị mặc định như đã khai báo trong class
         val gameData: GameData = GameData(
             id = 0,
-            gameType = GameType.RANKING_FILTER_GAME.value,
+            gameType = GameType.MATH_RUN_GAME.value,
             detailsType = GameDetailsContentType.FRAGMENT.value,
             name = "Game Test 1",
             image = "",
@@ -48,5 +55,14 @@ class ListGameFragment : BaseFragment<AFragmentBinding>(AFragmentBinding::inflat
         }
     }
 
-    override fun initObserver() {}
+
+    override fun initObserver() {
+        mainViewModel.apply {
+            dataAllGame.collectIn(this@ListGameFragment){
+                Timber.d("${TAG}QuangDV: list game size ${it.size}")
+
+            }
+        }
+
+    }
 }

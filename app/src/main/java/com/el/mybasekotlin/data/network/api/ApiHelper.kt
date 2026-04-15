@@ -3,6 +3,7 @@ package com.el.mybasekotlin.data.network.api
 import com.el.mybasekotlin.data.model.ConfigResponse
 import com.el.mybasekotlin.data.model.Notice
 import com.el.mybasekotlin.data.model.Setting
+import com.el.mybasekotlin.data.model.game.GameData
 import com.el.mybasekotlin.data.response.BaseDataNoticeResponse
 import com.el.mybasekotlin.data.response.BaseDataResponse
 import com.el.mybasekotlin.data.response.BaseResponseNotice
@@ -21,4 +22,10 @@ interface ApiHelper {
         page: Int
     ): Flow<BaseDataResponse<BaseResponseNotice<BaseDataNoticeResponse<MutableList<Notice>>>>>
     fun configApp() : Flow<ConfigResponse>
+
+
+    /**
+     * data game
+     */
+    fun getAllGame(): Flow<BaseDataResponse<MutableList<GameData>>>
 }

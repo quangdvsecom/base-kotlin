@@ -71,7 +71,10 @@ private fun buildDataClass(className: String, jsonMap: Map<String, Any>, classes
     return classBuilder.toString().trimEnd(',', '\n') + "\n)"
 }
 
-
+inline fun <reified T> parseJsonList(jsonString: String): List<T> {
+    val type = object : TypeToken<List<T>>() {}.type
+    return Gson().fromJson(jsonString, type)
+}
 
 //fun String.printJsonFieldsWithSerializedName(className: String = "GeneratedClass") {
 //    val mapType = object : TypeToken<Map<String, Any>>() {}.type

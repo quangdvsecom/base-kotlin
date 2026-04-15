@@ -7,26 +7,19 @@ import androidx.test.filters.MediumTest
 import com.el.mybasekotlin.data.model.Setting
 import com.el.mybasekotlin.data.network.api.ApiHelper
 import com.el.mybasekotlin.data.response.BaseDataResponse
-import com.el.mybasekotlin.data.state.DataState
-import com.el.mybasekotlin.data.state.getSuccessDataOrNull
-import com.el.mybasekotlin.providertest.DefaultDispatcherProvider
 import com.el.mybasekotlin.providertest.DispatcherProvider
 import com.el.mybasekotlin.providertest.TestDispatcherProvider
-import com.el.mybasekotlin.ui.fragment.MainScreenViewModel
+import com.el.mybasekotlin.ui.fragment.MainViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -48,7 +41,7 @@ import org.mockito.MockitoAnnotations
 class ViewModelTest() {
     @Mock
     private lateinit var apiHelper: ApiHelper
-    private lateinit var viewModel: MainScreenViewModel
+    private lateinit var viewModel: MainViewModel
     private lateinit var application: Application
     private lateinit var gson: Gson
 
@@ -62,7 +55,7 @@ class ViewModelTest() {
 //        dispatcherProvider.main
         gson = Gson()
         application = ApplicationProvider.getApplicationContext() // Get application context
-        viewModel = MainScreenViewModel(application, apiHelper)
+        viewModel = MainViewModel(application, apiHelper)
     }
 
     @After
