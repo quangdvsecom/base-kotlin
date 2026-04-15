@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My BaseKotlin</string>
+    <string name="network_error">Mất kết nối mạng, vui lòng thử lại</string>
+    <string name="wrong_otp">Mã OTP không chính xác</string>
+    <string name="login_another_device_error">Tài khoản đã đăng nhập trên thiết bị khác</string>
+    <string name="common_error">Oops! Something went wrong. Please try again later.</string>
+    <string name="title_activity_compose">ComposeActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>
