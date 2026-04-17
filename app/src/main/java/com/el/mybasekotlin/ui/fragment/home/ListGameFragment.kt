@@ -5,6 +5,8 @@ import androidx.fragment.app.activityViewModels
 import com.el.mybasekotlin.R
 import com.el.mybasekotlin.base.BaseFragment
 import com.el.mybasekotlin.databinding.AFragmentBinding
+import com.el.mybasekotlin.helpers.TestMessage
+import com.el.mybasekotlin.helpers.flowbus.busEvent
 import com.el.mybasekotlin.ui.fragment.MainViewModel
 import com.el.mybasekotlin.utils.extension.collectIn
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +33,7 @@ class ListGameFragment : BaseFragment<AFragmentBinding>(AFragmentBinding::inflat
     }
 
     override fun init() {
+//        busEvent(TestMessage("test Msg from AFragment"))
         setupRecyclerView()
     }
 
@@ -51,4 +54,5 @@ class ListGameFragment : BaseFragment<AFragmentBinding>(AFragmentBinding::inflat
                 }
         }
     }
+
 }
