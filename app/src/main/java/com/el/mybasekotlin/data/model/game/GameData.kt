@@ -1,31 +1,25 @@
 package com.el.mybasekotlin.data.model.game
 
-import android.content.Context
 import android.os.Parcelable
-import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.el.mybasekotlin.ui.fragment.camera.DetectType
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-
-
 /**
  * Thể loại game ,  1 game có nhiều biến thể
- *
  */
 enum class GameType(
     val value: Int,
-    val description: String // mô tả game cho dev và design dễ hiểu.
+    val description: String 
 ) {
-    RANKING_FILTER_GAME(1, "Đây là game Ranking - chọn hình theo yêu cầu"),//dang tắt
+    RANKING_FILTER_GAME(1, "Đây là game Ranking - chọn hình theo yêu cầu"),
     MATH_RUN_GAME(2, "Đây là game Math Run - chạy và giải toán");
 
     companion object {
         fun from(value: Int): GameType =
-            GameType.entries.find { it.value == value } ?: GameType.RANKING_FILTER_GAME
+            GameType.entries.find { it.value == value } ?: RANKING_FILTER_GAME
     }
 }
 
@@ -34,14 +28,14 @@ enum class GameType(
  */
 enum class GameDetailsContentType(
     val value: Int,
-    val description: String // mô tả game cho dev và design dễ hiểu.
+    val description: String 
 ) {
-    FRAGMENT(1, "Details game được xây bằng fragment"),//dang tắt
+    FRAGMENT(1, "Details game được xây bằng fragment"),
     CUSTOMVIEW(2, "Details Game được xây bằng customview");
 
     companion object {
         fun from(value: Int): GameDetailsContentType =
-            GameDetailsContentType.entries.find { it.value == value } ?: GameDetailsContentType.CUSTOMVIEW
+            GameDetailsContentType.entries.find { it.value == value } ?: CUSTOMVIEW
     }
 }
 
@@ -53,51 +47,38 @@ enum class GameDetailsContentType(
 data class GameData(
     @PrimaryKey
     @SerializedName("id")
-    val id: Int = 0,  // id game,id filter
-    @SerializedName("categorizeID") // filter by category
+    val id: Int = 0,
+    @SerializedName("categorizeID")
     val gameType: Int = GameType.RANKING_FILTER_GAME.value,
-    @SerializedName("detailsType") // filter by category
+    @SerializedName("detailsType")
     val detailsType: Int = GameDetailsContentType.CUSTOMVIEW.value,
     @SerializedName("name")
-    val name: String = "", // game name, tên hiển thị ở ngoài
-    @SerializedName("image") //thumb
-    val image: String = "", //  imageName =>> get file từ asset
+    val name: String? = "", 
+    @SerializedName("image")
+    val image: String? = "", 
     @SerializedName("likeCount")
-    val likeCount: String = "", // số lượt thích
+    val likeCount: String? = "", 
     @SerializedName("minTimeToPlay")
-    val minTimeToPlay: Long = 60000,  // min time  để chơi game ==>> config  này dùng để set mặc định cho record
+    val minTimeToPlay: Long = 60000,
     @SerializedName("count_down_time")
-    val countDownTimer: Long = 0,  //đếm ngược để chơi game, không có đếm thì =0 (một số game có đếm ngược, 1 số game không có)
+    val countDownTimer: Long = 0,
     @SerializedName("gameResult")
-    val gameResult: String = "link_video_record", //Link video record game (dùng cho tab My Video)
+    val gameResult: String? = "link_video_record",
     @SerializedName("pos")
-    val pos: Int, // vị trí game trên list
+    val pos: Int = 0,
     @SerializedName("enable")
-    val enable: Boolean, // tắt bật game theo config
+    val enable: Boolean = true,
     @SerializedName("tagPos")
-    val tagPos: Int,
+    val tagPos: Int = 0,
     @SerializedName("tag")
-    val tag: Int,
-    @SerializedName("gameResourcePath") // tài nguyên game trong asset  nên bằng id game vd : 101,102,223
-    val gameResourcePath: Int, // ID game resource mapping với list data game , theo [GameType] . (Ranking game, Tap, MathRun), vd: nếu id  data
-
-    /**
-     * Data từng game có 3 giải pháp
-     * 1. dùng id để mapping lấy ra từ list data
-     * 2. Dùng json string rồi convert sang object sau. phần convert tự xử lý trong từng viewModel của từng game
-     * 3.
-     */
-    @SerializedName("gameContentDataPath") // tài nguyên game trong asset nên bằng id game vd : 101,102,223
-    val gameContentDataPath: String = "",// Lưu dưới dạng JsonElement chung
+    val tag: Int = 0,
+    @SerializedName("gameResourcePath")
+    val gameResourcePath: Int = 0,
+    @SerializedName("gameContentDataPath")
+    val gameContentDataPath: String? = "",
     @SerializedName("cameraDetectType")
-    val cameraDetectType: Int = DetectType.FACE_DETECT.value,  // setup camera cho game ,
-
-
-    ) : Parcelable {
-    /**
-     * Hàm tiện ích giúp parse gameData ra một đối tượng cụ thể (GameData1, GameData2...)
-     * ở trên tầng ViewModel hoặc UseCase.
-     */
+    val cameraDetectType: Int = DetectType.FACE_DETECT.value,
+) : Parcelable {
     inline fun <reified T> getParsedGameData(): T? {
         return try {
             gameContentDataPath?.let { com.google.gson.Gson().fromJson(it, T::class.java) }
@@ -124,7 +105,6 @@ data class GameData2(
     @SerializedName("videoURL")
     val videoURL: String = "videoURL",
 )
-
 
 @Entity
 data class ImageData(

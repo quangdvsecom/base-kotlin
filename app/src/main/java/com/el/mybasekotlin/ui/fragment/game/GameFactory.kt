@@ -41,9 +41,16 @@ object GameFactory {
             }
 
             else -> {
-                DetailsContent.ViewContent { context ->
-                    EmptyGameCustom(context).apply {}
+//                DetailsContent.ViewContent { context ->
+//                    EmptyGameCustom(context).apply {}
+//                }
+                val fragment = MyFragmentGameExample().apply {
+                    arguments = Bundle().apply {
+                        putParcelable("KEY_GAME_DATA", gameData)
+                    }
                 }
+                DetailsContent.FragmentContent(fragment)
+
             }
         }
 

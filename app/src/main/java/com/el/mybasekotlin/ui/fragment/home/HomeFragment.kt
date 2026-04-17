@@ -1,6 +1,8 @@
 package com.el.mybasekotlin.ui.fragment.home
 
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.el.mybasekotlin.R
@@ -8,6 +10,7 @@ import com.el.mybasekotlin.base.BaseFragment
 import com.el.mybasekotlin.databinding.HomeFragmentBinding
 import com.el.mybasekotlin.ui.fragment.home.ListGameFragment
 import com.el.mybasekotlin.ui.fragment.BFragment
+import com.el.mybasekotlin.ui.fragment.LoginFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -28,8 +31,9 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>(HomeFragmentBinding::infl
     }
 
     private fun setupViewPager() {
-        val adapter = HomePagerAdapter(this)
+        val adapter = HomePagerAdapter(childFragmentManager, lifecycle)
         binding.viewPager.adapter = adapter
+        binding.viewPager.offscreenPageLimit=2
         binding.viewPager.isUserInputEnabled = true // Tắt vuốt nếu chỉ muốn dùng bottom nav
         
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -61,14 +65,15 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>(HomeFragmentBinding::infl
 
     override fun initObserver() {}
 
-    private inner class HomePagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+    private inner class HomePagerAdapter(fragment: FragmentManager,
+                                         lifecycle: Lifecycle) : FragmentStateAdapter(fragment,lifecycle) {
         override fun getItemCount(): Int = 3
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> ListGameFragment()
                 1 -> BFragment()
-                2 -> ListGameFragment() // Thay bằng CFragment nếu có
+                2 -> LoginFragment() // Thay bằng CFragment nếu có
                 else -> ListGameFragment()
             }
         }

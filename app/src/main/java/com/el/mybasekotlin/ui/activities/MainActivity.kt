@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var broadcastErrorReceiver: BroadcastReceiver
     private lateinit var broadcastReceiver: BroadcastReceiver
     private lateinit var broadcastNewNotice: BroadcastReceiver
-    private val mainViewModel : MainViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
     private val networkStatusProvider by lazy {
         NetworkStatusProvider(getSystemService(ConnectivityManager::class.java))
     }
@@ -77,7 +77,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        mainViewModel.getAllDataGame()
+        if (mainViewModel.dataAllGame.value.isEmpty())
+            mainViewModel.getAllDataGame()
         super.onStart()
 //        LocalBroadcastManager.getInstance(this)
 //            .registerReceiver(broadcastReceiver, IntentFilter(FIREBASE_NEW_TOKEN))
@@ -89,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(broadcastErrorReceiver, filter, RECEIVER_NOT_EXPORTED)
         } else {
-            registerReceiver(broadcastErrorReceiver, filter,RECEIVER_NOT_EXPORTED)
+            registerReceiver(broadcastErrorReceiver, filter, RECEIVER_NOT_EXPORTED)
         }
     }
 
@@ -149,7 +150,6 @@ class MainActivity : AppCompatActivity() {
 //        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
 //        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastNewNotice)
     }
-
 
 
 }

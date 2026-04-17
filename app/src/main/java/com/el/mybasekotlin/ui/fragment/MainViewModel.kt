@@ -105,6 +105,8 @@ class MainViewModel @Inject constructor(
 
     }
 
+      var isAddAdapter: Boolean =false
+
     private val _getListGameFilterState =
         MutableStateFlow<DataState<MutableList<GameData>>>(DataState.Empty)// listener state
     private val _dataAllGameFilter = MutableStateFlow(mutableStateListOf<GameData>())

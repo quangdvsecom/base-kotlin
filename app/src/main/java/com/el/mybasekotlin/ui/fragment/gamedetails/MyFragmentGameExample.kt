@@ -1,12 +1,15 @@
 package com.el.mybasekotlin.ui.fragment.gamedetails
 
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.el.mybasekotlin.data.model.game.GameData
 import com.el.mybasekotlin.databinding.MyFragmentGameExampleBinding
 import com.el.mybasekotlin.ui.fragment.game.BaseGameFragment
 import com.el.mybasekotlin.ui.fragment.game.GamePlayViewModel
 import com.el.mybasekotlin.utils.extension.collectIn
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.sceneview.node.ModelNode
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -29,10 +32,21 @@ class MyFragmentGameExample() :
         gameData = gameViewModel.currentGame.value
         Timber.d("QuangDV ${gameViewModel.currentGame.value?.name}")
     }
-
+    private var pigeonModelNode: io.github.sceneview.node.ModelNode? = null
     override fun init() {
 
-
+//        lifecycleScope.launch {
+//            val modelInstance = binding.sceneView.modelLoader.loadModelInstance("cat_ver3.glb")
+//            if (modelInstance != null) {
+//                pigeonModelNode = io.github.sceneview.node.ModelNode(modelInstance).apply {
+//                    position = io.github.sceneview.math.Position(x = 0f, y = -1.0f, z = -3.0f)
+//                    scale = io.github.sceneview.math.Scale(4f)
+//                    isVisible = false
+//                }
+//                binding.sceneView.addChildNode(pigeonModelNode!!)
+////                setupRingNode()
+//            }
+//        }
     }
 
     override fun onSetupGame() {

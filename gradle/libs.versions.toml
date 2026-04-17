@@ -2,10 +2,10 @@
 activityCompose = "1.10.1"
 agp = "8.6.1"
 gsonVersion = "2.10.1"
-hiltAndroidCompiler = "2.44"
+hiltAndroidCompiler = "2.57.2"
 hiltNavigationCompose = "1.2.0"
 junitJupiterParams = "5.9.0"
-kotlin = "2.0.10"
+kotlin = "2.2.21"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -18,8 +18,8 @@ libraryNoOp = "4.1.0"
 libraryVersion = "4.1.0"
 lifecycleViewmodelCompose = "2.8.7"
 material = "1.12.0"
-daggerHilt = "2.52"
-ksp = "2.0.10-1.0.24"
+daggerHilt = "2.57.2"
+ksp    = "2.2.21-2.0.4"
 databindingCompilerCommon = "8.8.0"
 converterGson = "2.11.0"
 converterScalars = "2.9.0"
@@ -44,7 +44,7 @@ multidex = "2.0.1"
 navigationCommonKtx = "2.8.5"
 workRuntimeKtx = "2.10.0"
 securityCryptoKtx = "1.0.0"
-hiltAndroidTesting = "2.48"
+hiltAndroidTesting = "2.57.2"
 playServicesMlkitFaceDetection = "17.1.0"
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -61,7 +61,6 @@ androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 com-google-firebase-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 gson-v2101 = { module = "com.google.code.gson:gson", version.ref = "gsonVersion" }
-hilt-android-compiler-v244 = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

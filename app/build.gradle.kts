@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.google.daggerhilt.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.google.ksp)
-    kotlin("plugin.serialization") version "2.0.10"
+    kotlin("plugin.serialization") version "2.2.21"
     id("kotlin-parcelize")
     kotlin("kapt")
     id("com.google.gms.google-services")
@@ -23,13 +23,13 @@ val localProperties = Properties().apply {
 }
 android {
     namespace = "com.el.mybasekotlin"
-    compileSdk = 35
+    compileSdk = 36
     packaging {
     }
     defaultConfig {
         applicationId = "com.el.mybasekotlin"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
@@ -93,11 +93,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     viewBinding {
         enable = true
@@ -152,8 +152,8 @@ dependencies {
     testImplementation ("app.cash.turbine:turbine:1.0.0")
     androidTestImplementation(project(":app"))
     androidTestImplementation(project(":app"))
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48") // Thay đổi phiên bản nếu cần
-    kaptAndroidTest("com.google.dagger:hilt-compiler:2.48")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.57.2") // Thay đổi phiên bản nếu cần
+    kaptAndroidTest("com.google.dagger:hilt-compiler:2.57.2")
 
     // Compose
     val composeBom = platform("androidx.compose:compose-bom:2024.12.01")
@@ -204,4 +204,5 @@ dependencies {
      */
 //    implementation("com.otaliastudios:cameraview:2.7.2")
     implementation(project(":cameraview"))
+    implementation("io.github.sceneview:sceneview:2.3.3")
 }
